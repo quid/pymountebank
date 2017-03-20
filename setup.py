@@ -11,7 +11,7 @@ with open("requirements.txt") as requirements_file:
 
 setup(
     name="mountebank",
-    version="0.0.0",
+    version="1.0.0",
     author="Quid Inc",
     author_email="infrastructure@quid.com",
     packages=find_packages(exclude=["tests*"]),
