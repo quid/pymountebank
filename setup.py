@@ -10,7 +10,7 @@ with open("requirements.txt") as requirements_file:
 
 
 setup(
-    name="mountebank",
+    name="pymountebank",
     version="1.0.0",
     author="Quid Inc",
     author_email="infrastructure@quid.com",
