@@ -1,4 +1,6 @@
-/.cache/*
 *.pyc
-/venv/*
+/.cache/*
+/dist/*
+/mountebank.egg-info/*
 /mountebank/tests/.cache/*
+/venv/*
