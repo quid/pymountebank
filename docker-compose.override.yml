@@ -1,0 +1,17 @@
+version: "2"
+services:
+
+  tests:
+    environment:
+      # This TERM is used to make `docker exec` more manageable in development:
+      # https://github.com/docker/docker/issues/9299
+      - TERM=xterm
+    volumes:
+      # Mount our working source code so that the container will pick it up
+      - "./mountebank/:/apps/mountebank"
+
+  tests2:
+    environment:
+      - TERM=xterm
+    volumes:
+      - "./mountebank/:/apps/mountebank"
