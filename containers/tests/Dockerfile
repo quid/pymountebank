@@ -1,5 +1,7 @@
-FROM quid-dock.jfrog.io/python:3.6
+FROM quid-dock.jfrog.io/python:3.6-alpine
 MAINTAINER <infrastructure@quid.com>
+
+RUN apk add --update bash
 
 COPY ./requirements-dev.txt .
 RUN pip install -r requirements-dev.txt
