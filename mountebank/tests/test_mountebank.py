@@ -26,6 +26,12 @@ def test_get_requests():
         assert mocked_requests[2]["path"] == "/why/not/another"
 
 
+def test_get_no_requests():
+    imposter = Imposter()
+    with imposter.mockhttp() as url:
+        assert imposter.get_requests() == []
+
+
 def test_static_port():
     imposter = Imposter()
     imposter.add_stub("/test", "GET", "What I'm expecting")
