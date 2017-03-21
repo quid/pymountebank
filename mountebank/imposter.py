@@ -122,6 +122,7 @@ class Imposter(object):
         Returns:
             dict: The requests received by the mock service.
         """
-        response = requests.get("%s/%s" % (MOUNTEBANK_URL, port))
+        response = requests.get("%s/imposters/%s" % (
+            self.mountebank_url, port))
         response_data = response.json()
         return response_data["requests"]
