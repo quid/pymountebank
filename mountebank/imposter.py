@@ -115,3 +115,13 @@ class Imposter(object):
                 logger.exception(
                     "Unable to delete mountebank mock: %s", response.text)
                 raise
+
+    def get_requests(self):
+        """Retrieves the requests received by the mock service.
+
+        Returns:
+            dict: The requests received by the mock service.
+        """
+        response = requests.get("%s/%s" % (MOUNTEBANK_URL, port))
+        response_data = response.json()
+        return response_data["requests"]
