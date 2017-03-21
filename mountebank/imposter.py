@@ -33,6 +33,7 @@ class Imposter(object):
             mountebank_port (int): Optional port to use to connect with
             mountebank.
         """
+        self.port = None
         self.mountebank_scheme = mountebank_scheme
         self.mountebank_host = mountebank_host
         self.mountebank_port = mountebank_port
@@ -97,16 +98,16 @@ class Imposter(object):
             logger.exception("Mountebank returned: %s", response.text)
             raise
 
-        port = response.json()["port"]
+        self.port = response.json()["port"]
         url = "%s://%s:%s" % (
-            self.mountebank_scheme, self.mountebank_host, port)
+            self.mountebank_scheme, self.mountebank_host, self.port)
 
         try:
             yield url
 
         finally:
             response = requests.delete("%s/imposters/%s" % (
-                self.mountebank_url, port))
+                self.mountebank_url, self.port))
 
             try:
                 response.raise_for_status()
@@ -123,6 +124,6 @@ class Imposter(object):
             dict: The requests received by the mock service.
         """
         response = requests.get("%s/imposters/%s" % (
-            self.mountebank_url, port))
+            self.mountebank_url, self.port))
         response_data = response.json()
         return response_data["requests"]
