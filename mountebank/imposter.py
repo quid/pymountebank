@@ -21,9 +21,24 @@ class Imposter(object):
             assert requests.get(url + "/test").text == "What I'm expecting"
     """
 
-    def __init__(self):
+    def __init__(self, mountebank_scheme="http", mountebank_host="mountebank",
+        mountebank_port=2525):
         """Instantiates a new Imposter instance.
+
+        Args:
+            mountebank_scheme (str): Optional scheme to use to connect with
+            mountebank.
+            mountebank_host (str): Optional host to use to connect with
+            mountebank.
+            mountebank_port (int): Optional port to use to connect with
+            mountebank.
         """
+        self.mountebank_scheme = mountebank_scheme
+        self.mountebank_host = mountebank_host
+        self.mountebank_port = mountebank_port
+        self.mountebank_url = "%s://%s:%s" % (
+            mountebank_scheme, mountebank_host, mountebank_port)
+
         self._imposter = {
             "protocol": "http",
             "stubs": [{
@@ -59,20 +74,20 @@ class Imposter(object):
         })
 
     @contextmanager
-    def mockhttp(self, mountebank_scheme="http", mountebank_host="mountebank",
-        mountebank_port=2525):
+    def mockhttp(self, port=None):
         """A contextmanager that uses mountebank to mock out a service.
 
         Args:
-            imposter (dict): The mountebank imposter definition.
-            mountebank_url (str): Optional URL to communicate with mountebank.
+            port (int): Optional static port to open for the new mock service.
+            If not provided a port will be randomly generated.
 
         Yields:
             str: The URL to the mocked service.
         """
-        mountebank_url = "%s://%s:%s" % (
-            mountebank_scheme, mountebank_host, mountebank_port)
-        response = requests.post(mountebank_url + "/imposters",
+        if port:
+            self._imposter["port"] = port
+
+        response = requests.post(self.mountebank_url + "/imposters",
             data=json.dumps(self._imposter))
 
         try:
@@ -83,14 +98,15 @@ class Imposter(object):
             raise
 
         port = response.json()["port"]
-        url = "%s://%s:%s" % (mountebank_scheme, mountebank_host, port)
+        url = "%s://%s:%s" % (
+            self.mountebank_scheme, self.mountebank_host, port)
 
         try:
             yield url
 
         finally:
             response = requests.delete("%s/imposters/%s" % (
-                mountebank_url, port))
+                self.mountebank_url, port))
 
             try:
                 response.raise_for_status()
