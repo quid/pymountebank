@@ -11,6 +11,7 @@ with open("requirements.txt") as requirements_file:
 
 setup(
     name="pymountebank",
+    license="BSD 3-Clause License",
     version="1.0.4",
     author="Quid Inc",
     author_email="infrastructure@quid.com",
@@ -18,5 +19,8 @@ setup(
     include_package_data=True,
     description="Mountebank wrapper for mocking HTTP APIs",
     long_description=readme,
-    install_requires=requirements
+    install_requires=requirements,
+    classifiers=[
+        "License :: OSI Approved :: BSD License",
+    ]
 )
