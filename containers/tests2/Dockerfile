@@ -1,4 +1,4 @@
-FROM quid-dock.jfrog.io/python:2.7-alpine
+FROM python:2.7-alpine
 MAINTAINER <infrastructure@quid.com>
 
 RUN apk add --update bash
