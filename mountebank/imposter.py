@@ -2,9 +2,9 @@ import json
 import logging
 from contextlib import contextmanager
 
-from retrying import retry
 import requests
 import requests.exceptions
+from retrying import retry
 
 
 logger = logging.getLogger(__name__)
