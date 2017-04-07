@@ -75,16 +75,24 @@ class Imposter(object):
         })
 
     @contextmanager
-    def mockhttp(self, port=None):
+    def mockhttp(self, port=None, wait_for_mountebank=True):
         """A contextmanager that uses mountebank to mock out a service.
 
         Args:
             port (int): Optional static port to open for the new mock service.
             If not provided a port will be randomly generated.
+            wait_for_mountebank (bool): Whether or not to wait for mountebank
+            to become available. This is useful in containers where mountebank
+            might still be loading while tests are running. By default this
+            function will wait a few seconds for mountebank to become
+            available. Set to False to not wait at all.
 
         Yields:
             str: The URL to the mocked service.
         """
+        if wait_for_mountebank:
+            self.wait()
+
         if port:
             self._imposter["port"] = port
 
@@ -127,3 +135,11 @@ class Imposter(object):
             self.mountebank_url, self.port))
         response_data = response.json()
         return response_data["requests"]
+
+    def wait(self):
+        """Blocks until mountebank is accessible (or waiting times out).
+        """
+        def wait():
+            requests.get(self.mountebank_url).raise_for_status()
+
+        retry(wait_fixed=1000, stop_max_attempt_number=10)(wait)()
