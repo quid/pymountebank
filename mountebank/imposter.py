@@ -57,7 +57,7 @@ class Imposter(object):
             path (str): The path being mocked.
             path (str): The method being mocked.
             body (str): The text the mock should return.
-            repeats (int): The total number of times to repeat a response. If
+            repeat (int): The total number of times to repeat a response. If
             not set then the response will repeat indefinitely.
         """
         predicates = [{
