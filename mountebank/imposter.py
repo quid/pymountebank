@@ -50,30 +50,47 @@ class Imposter(object):
             }]
         }
 
-    def add_stub(self, path, method, body):
+    def add_stub(self, path, method, body, repeat=0):
         """Adds a stub to mock.
 
         Args:
             path (str): The path being mocked.
             path (str): The method being mocked.
             body (str): The text the mock should return.
+            repeats (int): The total number of times to repeat a response. If
+            not set then the response will repeat indefinitely.
         """
-        index = len(self._imposter["stubs"]) - 1
+        predicates = [{
+            "equals": {
+                "method": method,
+                "path": path
+            }
+        }]
+        responses = [{
+            "is": {
+                "statusCode": 200,
+                "body": body
+            }
+        }]
 
-        self._imposter["stubs"].insert(index, {
-            "predicates": [{
-                "equals": {
-                    "method": method,
-                    "path": path
-                }
-            }],
-            "responses": [{
-                "is": {
-                    "statusCode": 200,
-                    "body": body
-                }
-            }]
-        })
+        if repeat > 0:
+            responses = responses * repeat
+
+        # Check to see if a stub already exists for the predicates. If so,
+        # update the existing stub.
+        predicates_exists = False
+        for stub in self._imposter["stubs"]:
+            if "predicates" in stub and stub["predicates"] == predicates:
+                predicates_exists = True
+                stub["responses"] += responses
+                break
+
+        # Add the new stub near the bottom before our catch-all
+        if not predicates_exists:
+            self._imposter["stubs"].insert(len(self._imposter["stubs"]) - 1, {
+                "predicates": predicates,
+                "responses": responses
+            })
 
     @contextmanager
     def mockhttp(self, port=None, wait_for_mountebank=True):

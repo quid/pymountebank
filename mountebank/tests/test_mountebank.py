@@ -11,6 +11,44 @@ def test_example():
         response.raise_for_status()
         assert response.text == "What I'm expecting"
 
+        response = requests.get(url + "/test")
+        response.raise_for_status()
+        assert response.text == "What I'm expecting"
+
+
+def test_repeat():
+    imposter = Imposter()
+    imposter.add_stub("/test", "GET", "Not what I'm expecting", repeat=2)
+    imposter.add_stub("/test", "GET", "What I'm expecting")
+
+    with imposter.mockhttp() as url:
+        response = requests.get(url + "/test")
+        assert response.text == "Not what I'm expecting"
+        response = requests.get(url + "/test")
+        assert response.text == "Not what I'm expecting"
+        response = requests.get(url + "/test")
+        assert response.text == "What I'm expecting"
+
+        # Requests loop around when there's repetition
+        response = requests.get(url + "/test")
+        assert response.text == "Not what I'm expecting"
+
+
+def test_implied_repeat():
+    imposter = Imposter()
+    imposter.add_stub("/test", "GET", "Not what I'm expecting")
+    imposter.add_stub("/test", "GET", "What I'm expecting")
+
+    with imposter.mockhttp() as url:
+        response = requests.get(url + "/test")
+        assert response.text == "Not what I'm expecting"
+
+        response = requests.get(url + "/test")
+        assert response.text == "What I'm expecting"
+
+        response = requests.get(url + "/test")
+        assert response.text == "Not what I'm expecting"
+
 
 def test_get_requests():
     imposter = Imposter()
