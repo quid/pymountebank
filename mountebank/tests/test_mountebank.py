@@ -16,6 +16,27 @@ def test_example():
         assert response.text == "What I'm expecting"
 
 
+def test_status_codes():
+
+    imposter = Imposter()
+    imposter.add_stub("/test", "GET", "Normal response")
+    imposter.add_stub(
+        "/test",
+        "GET",
+        "Response with a status code",
+        status_code=418
+    )
+
+    with imposter.mockhttp() as url:
+        response = requests.get(url + "/test")
+        assert response.text == "Normal response"
+        assert response.status_code == 200
+
+        response = requests.get(url + "/test")
+        assert response.text == "Response with a status code"
+        assert response.status_code == 418
+
+
 def test_repeat():
     imposter = Imposter()
     imposter.add_stub("/test", "GET", "Not what I'm expecting", repeat=2)

@@ -1,5 +1,9 @@
 # Changes
 
+## 1.3
+
+* Allows status codes to be used to be able to mock non-200 responses.
+
 ## 1.2
 
 * `repeat` argument added to `Imposter.add_stub`
