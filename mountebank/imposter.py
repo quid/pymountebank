@@ -50,7 +50,7 @@ class Imposter(object):
             }]
         }
 
-    def add_stub(self, path, method, body, repeat=0):
+    def add_stub(self, path, method, body, repeat=0, status_code=200):
         """Adds a stub to mock.
 
         Args:
@@ -59,6 +59,7 @@ class Imposter(object):
             body (str): The text the mock should return.
             repeat (int): The total number of times to repeat a response. If
             not set then the response will repeat indefinitely.
+            status_code (int): The status code to return.
         """
         predicates = [{
             "equals": {
@@ -68,7 +69,7 @@ class Imposter(object):
         }]
         responses = [{
             "is": {
-                "statusCode": 200,
+                "statusCode": status_code,
                 "body": body
             }
         }]
