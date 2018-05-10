@@ -161,4 +161,4 @@ class Imposter(object):
         def wait():
             requests.get(self.mountebank_url).raise_for_status()
 
-        retry(wait=wait_fixed(1000), stop=stop_after_attempt(10)(wait)()
+        retry(wait=wait_fixed(1000), stop=stop_after_attempt(10))(wait)()
