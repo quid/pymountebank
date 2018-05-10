@@ -4,7 +4,7 @@ from contextlib import contextmanager
 
 import requests
 import requests.exceptions
-from retrying import retry
+from tenacity import retry, wait_fixed, stop_after_attempt
 
 
 logger = logging.getLogger(__name__)
@@ -161,4 +161,4 @@ class Imposter(object):
         def wait():
             requests.get(self.mountebank_url).raise_for_status()
 
-        retry(wait_fixed=1000, stop_max_attempt_number=10)(wait)()
+        retry(wait=wait_fixed(1000), stop=stop_after_attempt(10)(wait)()
