@@ -1,5 +1,9 @@
 # Changes
 
+## 1.4
+
+* Relaxed the dependencies needed for pymountebank and also used tenacity as retrying is deprecated.
+
 ## 1.3
 
 * Allows status codes to be used to be able to mock non-200 responses.
