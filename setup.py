@@ -13,7 +13,7 @@ setup(
     name="pymountebank",
     description="Mountebank wrapper for mocking HTTP APIs",
     license="BSD 3-Clause License",
-    version="1.4.0",
+    version="1.4.1",
     author="Quid Inc",
     author_email="infrastructure@quid.com",
     url="https://github.com/quid/pymountebank",
