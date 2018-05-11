@@ -1,5 +1,9 @@
 # Changes
 
+## 1.4.1
+
+* Wait 1 second while waiting for mountebank to come up; retry used milliseconds while tenacity uses seconds.
+
 ## 1.4
 
 * Relaxed the dependencies needed for pymountebank and also used tenacity as retrying is deprecated.
